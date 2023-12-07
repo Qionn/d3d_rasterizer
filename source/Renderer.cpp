@@ -90,7 +90,7 @@ namespace dae
 		swapChainDesc.BufferDesc.Width						= m_Width;
 		swapChainDesc.BufferDesc.Height						= m_Height;
 		swapChainDesc.BufferDesc.RefreshRate.Numerator		= 1;
-		swapChainDesc.BufferDesc.RefreshRate.Denominator	= 60000000000;
+		swapChainDesc.BufferDesc.RefreshRate.Denominator	= 60;
 		swapChainDesc.BufferDesc.Format						= DXGI_FORMAT_R8G8B8A8_UNORM;
 		swapChainDesc.BufferDesc.ScanlineOrdering			= DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 		swapChainDesc.SampleDesc.Count						= 1;

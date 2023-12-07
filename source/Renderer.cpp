@@ -20,6 +20,17 @@ namespace dae
 		{
 			std::cout << "DirectX initialization failed!\n";
 		}
+
+		//Create test mesh
+		std::vector<Vertex> vertices{
+			{ { 0.0f,  0.5f, 0.5f}, {1.0f, 0.0f, 0.0f} },
+			{ { 0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f} },
+			{ {-0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f} },
+		};
+
+		std::vector<uint32_t> indices{ 0, 1, 2 };
+
+		m_pTestMesh = std::make_unique<Mesh>(m_pDevice, vertices, indices);
 	}
 
 	Renderer::~Renderer()
@@ -54,6 +65,8 @@ namespace dae
 		constexpr float clearColor[4] = { 0.0f, 0.0f, 0.3f, 1.0f };
 		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, clearColor);
 		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
+
+		m_pTestMesh->Render(m_pDeviceContext);
 
 		m_pSwapChain->Present(0, 0);
 	}
@@ -149,6 +162,8 @@ namespace dae
 		{
 			return result;
 		}
+
+		m_pDeviceContext->OMSetRenderTargets(1, &m_pRenderTargetView, m_pDepthStencilView);
 
 		D3D11_VIEWPORT viewport{};
 		viewport.Width		= static_cast<float>(m_Width);

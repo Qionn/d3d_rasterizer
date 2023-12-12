@@ -32,7 +32,7 @@ VS_OUTPUT VS(VS_INPUT input)
 
 float4 PS(VS_OUTPUT input) : SV_TARGET
 {
-    return float4(input.Color, 0.0f);
+    return float4(input.Color, 1.0f);
 }
 
 // --------------------------------------------------------

@@ -89,7 +89,7 @@ namespace dae
 
 		IDXGIFactory1* pDxgiFactory;
 		
-		result = CreateDXGIFactory1(__uuidof(IDXGIFactory1), reinterpret_cast<void**>(&pDxgiFactory));
+		result = CreateDXGIFactory1(IID_PPV_ARGS(&pDxgiFactory));
 		if (FAILED(result))
 		{
 			return result;
@@ -151,7 +151,7 @@ namespace dae
 			return result;
 		}
 
-		result = m_pSwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), reinterpret_cast<void**>(&m_pRenderTargetBuffer));
+		result = m_pSwapChain->GetBuffer(0, IID_PPV_ARGS(&m_pRenderTargetBuffer));
 		if (FAILED(result))
 		{
 			return result;

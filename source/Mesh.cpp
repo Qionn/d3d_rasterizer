@@ -50,7 +50,7 @@ namespace dae
 		if (m_pVertexBuffer) m_pVertexBuffer->Release();
 	}
 
-	void Mesh::Render(ID3D11DeviceContext* pDeviceContext) const
+	void Mesh::Render(const Camera& camera, ID3D11DeviceContext* pDeviceContext) const
 	{
 		pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 		pDeviceContext->IASetInputLayout(m_pEffect->GetInputLayout());
@@ -59,6 +59,8 @@ namespace dae
 		constexpr UINT offset = 0;
 		pDeviceContext->IASetVertexBuffers(0, 1, &m_pVertexBuffer, &stride, &offset);
 		pDeviceContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+
+		m_pEffect->SetWorldViewProjMatrix(worldMatrix * camera.viewMatrix * camera.projectionMatrix);
 
 		D3DX11_TECHNIQUE_DESC techniqueDesc{};
 		m_pEffect->GetTechnique()->GetDesc(&techniqueDesc);

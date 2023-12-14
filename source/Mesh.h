@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Effect.h"
+#include "Camera.h"
+#include "Matrix.h"
 
 namespace dae
 {
@@ -13,6 +15,9 @@ namespace dae
 	class Mesh final
 	{
 	public:
+		Matrix worldMatrix;
+
+	public:
 		Mesh(ID3D11Device* pDevice, const std::vector<Vertex>& vertices, const std::vector<uint32_t>& indices);
 		~Mesh();
 
@@ -21,7 +26,7 @@ namespace dae
 		Mesh(Mesh&&)					= delete;
 		Mesh& operator=(Mesh&&)			= delete;
 
-		void Render(ID3D11DeviceContext* pDeviceContext) const;
+		void Render(const Camera& camera, ID3D11DeviceContext* pDeviceContext) const;
 
 	private:
 		std::vector<Vertex> m_Vertices;

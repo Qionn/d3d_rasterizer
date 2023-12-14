@@ -41,8 +41,14 @@ namespace dae
 
 		if (FAILED(result))
 		{
-			std::wcout << L"Failed to create input layout\n";
+			std::cout << "Failed to create input layout\n";
 			assert(false);
+		}
+
+		n_pMatWorldViewProjVariable = m_pEffect->GetVariableByName("gWorldViewProj")->AsMatrix();
+		if (!n_pMatWorldViewProjVariable->IsValid())
+		{
+			std::cout << "n_pMatWorldViewProjVariable not valid!\n";
 		}
 	}
 
@@ -66,6 +72,11 @@ namespace dae
 	ID3D11InputLayout* Effect::GetInputLayout() const
 	{
 		return m_pInputLayout;
+	}
+
+	void Effect::SetWorldViewProjMatrix(const Matrix& matrix)
+	{
+		n_pMatWorldViewProjVariable->SetMatrix(matrix.GetData());
 	}
 
 	ID3DX11Effect* Effect::LoadEffect(ID3D11Device* pDevice, const std::wstring& assetFile)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Mesh.h"
+#include "Camera.h"
 
 struct SDL_Window;
 struct SDL_Surface;
@@ -28,6 +29,8 @@ namespace dae
 		int m_Height{};
 
 		bool m_IsInitialized{ false };
+
+		Camera m_Camera;
 
 		ID3D11Device* m_pDevice;
 		ID3D11DeviceContext* m_pDeviceContext;

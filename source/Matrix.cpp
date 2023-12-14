@@ -146,14 +146,21 @@ namespace dae {
 
 	Matrix Matrix::CreateLookAtLH(const Vector3& origin, const Vector3& forward, const Vector3& up)
 	{
-		assert(false && "Not Implemented");
-		return {};
+		Vector3 zAxis = forward.Normalized();
+		Vector3 xAxis = Vector3::Cross(up, zAxis).Normalized();
+		Vector3 yAxis = Vector3::Cross(zAxis, xAxis);
+
+		return { xAxis, yAxis, zAxis, origin };
 	}
 
 	Matrix Matrix::CreatePerspectiveFovLH(float fov, float aspect, float zn, float zf)
 	{
-		assert(false && "Not Implemented");
-		return {};
+		return {
+			{ 1.0f / (aspect * fov), 0.0f, 0.0f, 0.0f },
+			{ 0.0f, 1.0f / fov, 0.0f, 0.0f },
+			{ 0.0f, 0.0f, zf / (zf - zn), 1.0f },
+			{ 0.0f, 0.0f, -(zf * zn) / (zf - zn), 0.0f }
+		};
 	}
 
 	Vector3 Matrix::GetAxisX() const
@@ -236,7 +243,18 @@ namespace dae {
 		return CreateScale(s[0], s[1], s[2]);
 	}
 
+	float* Matrix::GetData()
+	{
+		return &data[0].x;
+	}
+
+	const float* Matrix::GetData() const
+	{
+		return &data[0].x;
+	}
+
 #pragma region Operator Overloads
+
 	Vector4& Matrix::operator[](int index)
 	{
 		assert(index <= 3 && index >= 0);

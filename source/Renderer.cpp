@@ -5,9 +5,14 @@ namespace dae
 {
 	Renderer::Renderer(SDL_Window* pWindow)
 		: m_pWindow(pWindow)
+		, m_Camera{ Vector3::Zero, 45.0f }
 	{
 		//Initialize
 		SDL_GetWindowSize(pWindow, &m_Width, &m_Height);
+
+		//Initialize Camera
+		float aspectRatio = static_cast<float>(m_Width) / m_Height;
+		m_Camera.Initialize(aspectRatio, 0.001f, 1000.0f, 45.0f);
 
 		//Initialize DirectX pipeline
 		const HRESULT result = InitializeDirectX();
@@ -23,14 +28,19 @@ namespace dae
 
 		//Create test mesh
 		std::vector<Vertex> vertices{
-			{ { 0.0f,  0.5f, 0.5f}, {1.0f, 0.0f, 0.0f} },
-			{ { 0.5f, -0.5f, 0.5f}, {0.0f, 0.0f, 1.0f} },
-			{ {-0.5f, -0.5f, 0.5f}, {0.0f, 1.0f, 0.0f} },
+			{ {-0.5f,  0.5f, 0.0f}, {1.0f, 0.0f, 0.0f} }, // top left
+			{ { 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f} }, // bottom right
+			{ {-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f} }, // bottom left
+			{ { 0.5f,  0.5f, 0.0f}, {1.0f, 1.0f, 0.0f} }, // top right
 		};
 
-		std::vector<uint32_t> indices{ 0, 1, 2 };
+		std::vector<uint32_t> indices{
+			0, 1, 2,
+			0, 3, 1
+		};
 
 		m_pTestMesh = std::make_unique<Mesh>(m_pDevice, vertices, indices);
+		m_pTestMesh->worldMatrix = Matrix::CreateTranslation(0.0f, 0.0f, 5.0f);
 	}
 
 	Renderer::~Renderer()
@@ -53,9 +63,8 @@ namespace dae
 
 	void Renderer::Update(const Timer* pTimer)
 	{
-
+		m_Camera.Update(pTimer);
 	}
-
 
 	void Renderer::Render() const
 	{
@@ -66,7 +75,7 @@ namespace dae
 		m_pDeviceContext->ClearRenderTargetView(m_pRenderTargetView, clearColor);
 		m_pDeviceContext->ClearDepthStencilView(m_pDepthStencilView, D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL, 1.0f, 0);
 
-		m_pTestMesh->Render(m_pDeviceContext);
+		m_pTestMesh->Render(m_Camera, m_pDeviceContext);
 
 		m_pSwapChain->Present(0, 0);
 	}

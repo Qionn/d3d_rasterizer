@@ -10,6 +10,7 @@ namespace dae
 		, m_Indices{ indices }
 		, m_NumIndices{ static_cast<uint32_t>(indices.size()) }
 		, m_pEffect{ std::make_unique<Effect>(pDevice, L"Resources/PosCol3D.fx")}
+		, m_pDevice{ pDevice }
 	{
 		D3D11_BUFFER_DESC bufferDesc{};
 		bufferDesc.Usage			= D3D11_USAGE_IMMUTABLE;
@@ -21,7 +22,7 @@ namespace dae
 		D3D11_SUBRESOURCE_DATA initData{};
 		initData.pSysMem = m_Vertices.data();
 
-		HRESULT result = pDevice->CreateBuffer(&bufferDesc, &initData, &m_pVertexBuffer);
+		HRESULT result = m_pDevice->CreateBuffer(&bufferDesc, &initData, &m_pVertexBuffer);
 		if (FAILED(result))
 		{
 			std::wcout << L"Failed to create vertex buffer\n";
@@ -36,7 +37,7 @@ namespace dae
 
 		initData.pSysMem = m_Indices.data();
 
-		result = pDevice->CreateBuffer(&bufferDesc, &initData, &m_pIndexBuffer);
+		result = m_pDevice->CreateBuffer(&bufferDesc, &initData, &m_pIndexBuffer);
 		if (FAILED(result))
 		{
 			std::wcout << L"Failed to create index buffer\n";
@@ -61,6 +62,7 @@ namespace dae
 		pDeviceContext->IASetIndexBuffer(m_pIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 
 		m_pEffect->SetWorldViewProjMatrix(worldMatrix * camera.viewMatrix * camera.projectionMatrix);
+		m_pEffect->SetDiffuseMap(m_pDiffuseMap.get());
 
 		D3DX11_TECHNIQUE_DESC techniqueDesc{};
 		m_pEffect->GetTechnique()->GetDesc(&techniqueDesc);
@@ -69,5 +71,10 @@ namespace dae
 			m_pEffect->GetTechnique()->GetPassByIndex(i)->Apply(0, pDeviceContext);
 			pDeviceContext->DrawIndexed(m_NumIndices, 0, 0);
 		}
+	}
+
+	void Mesh::SetDiffuseMap(const std::string_view& filepath)
+	{
+		m_pDiffuseMap = std::make_unique<Texture>(m_pDevice, filepath);
 	}
 }

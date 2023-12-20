@@ -28,10 +28,10 @@ namespace dae
 
 		//Create test mesh
 		std::vector<Vertex> vertices{
-			{ {-0.5f,  0.5f, 0.0f}, {1.0f, 0.0f, 0.0f} }, // top left
-			{ { 0.5f, -0.5f, 0.0f}, {0.0f, 0.0f, 1.0f} }, // bottom right
-			{ {-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f, 0.0f} }, // bottom left
-			{ { 0.5f,  0.5f, 0.0f}, {1.0f, 1.0f, 0.0f} }, // top right
+			{ {-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f} }, // top left
+			{ { 0.5f, -0.5f, 0.0f}, {1.0f, 1.0f} }, // bottom right
+			{ {-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f} }, // bottom left
+			{ { 0.5f,  0.5f, 0.0f}, {1.0f, 0.0f} }, // top right
 		};
 
 		std::vector<uint32_t> indices{
@@ -41,6 +41,7 @@ namespace dae
 
 		m_pTestMesh = std::make_unique<Mesh>(m_pDevice, vertices, indices);
 		m_pTestMesh->worldMatrix = Matrix::CreateTranslation(0.0f, 0.0f, 5.0f);
+		m_pTestMesh->SetDiffuseMap("Resources/uv_grid_2.png");
 	}
 
 	Renderer::~Renderer()

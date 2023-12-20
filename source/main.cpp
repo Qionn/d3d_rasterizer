@@ -6,6 +6,7 @@
 
 #undef main
 #include "Renderer.h"
+#include "Effect.h"
 
 using namespace dae;
 
@@ -52,14 +53,18 @@ int main(int argc, char* args[])
 		{
 			switch (e.type)
 			{
-			case SDL_QUIT:
-				isLooping = false;
-				break;
-			case SDL_KEYUP:
-				//Test for a key
-				//if (e.key.keysym.scancode == SDL_SCANCODE_X)
-				break;
-			default: ;
+				case SDL_QUIT:
+					isLooping = false;
+					break;
+
+				case SDL_KEYUP:
+					switch (e.key.keysym.scancode)
+					{
+						case SDL_SCANCODE_F2:
+							Effect::CycleTechnique();
+							break;
+					}
+					break;
 			}
 		}
 

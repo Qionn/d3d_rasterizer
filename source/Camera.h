@@ -35,7 +35,7 @@ namespace dae
 		float farPlane			= 100.0f;
 
 		float rotationSpeed		= 0.01f;
-		float walkSpeed			= 10.0f;
+		float walkSpeed			= 5.0f;
 		float dragSpeed			= 5.0f;
 
 		Matrix invViewMatrix{};

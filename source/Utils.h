@@ -1,6 +1,8 @@
 #pragma once
 #include <fstream>
+#include <vector>
 #include "Math.h"
+#include "Mesh.h"
 
 namespace dae
 {
@@ -9,7 +11,7 @@ namespace dae
 		//Just parses vertices and indices
 #pragma warning(push)
 #pragma warning(disable : 4505) //Warning unreferenced local function
-		static bool ParseOBJ(const std::string& filename, std::vector<Vertex_In>& vertices, std::vector<uint32_t>& indices, bool flipAxisAndWinding = true)
+		static bool ParseOBJ(const std::string& filename, std::vector<Vertex>& vertices, std::vector<uint32_t>& indices, bool flipAxisAndWinding = true)
 		{
 			std::ifstream file(filename);
 			if (!file)
@@ -64,7 +66,7 @@ namespace dae
 					//add the material index as attibute to the attribute array
 					//
 					// Faces or triangles
-					Vertex_In vertex{};
+					Vertex vertex{};
 					size_t iPosition, iTexCoord, iNormal;
 
 					uint32_t tempIndices[3];
@@ -82,7 +84,7 @@ namespace dae
 							{
 								// Optional texture coordinate
 								file >> iTexCoord;
-								vertex.uv = UVs[iTexCoord - 1];
+								vertex.texCoord = UVs[iTexCoord - 1];
 							}
 
 							if ('/' == file.peek())
@@ -126,9 +128,9 @@ namespace dae
 				const Vector3& p0 = vertices[index0].position;
 				const Vector3& p1 = vertices[index1].position;
 				const Vector3& p2 = vertices[index2].position;
-				const Vector2& uv0 = vertices[index0].uv;
-				const Vector2& uv1 = vertices[index1].uv;
-				const Vector2& uv2 = vertices[index2].uv;
+				const Vector2& uv0 = vertices[index0].texCoord;
+				const Vector2& uv1 = vertices[index1].texCoord;
+				const Vector2& uv2 = vertices[index2].texCoord;
 
 				const Vector3 edge0 = p1 - p0;
 				const Vector3 edge1 = p2 - p0;

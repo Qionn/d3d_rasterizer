@@ -12,7 +12,8 @@ namespace dae
 
 		//Initialize Camera
 		float aspectRatio = static_cast<float>(m_Width) / m_Height;
-		m_Camera.Initialize(aspectRatio, 0.001f, 1000.0f, 45.0f);
+		m_Camera.Initialize(aspectRatio, 0.001f, 1000.0f, 45.0f, { 0.0f, 0.0f, -50.0f });
+		m_Camera.walkSpeed = 30.0f;
 
 		//Initialize DirectX pipeline
 		const HRESULT result = InitializeDirectX();
@@ -27,21 +28,12 @@ namespace dae
 		}
 
 		//Create test mesh
-		std::vector<Vertex> vertices{
-			{ {-0.5f,  0.5f, 0.0f}, {0.0f, 0.0f} }, // top left
-			{ { 0.5f, -0.5f, 0.0f}, {1.0f, 1.0f} }, // bottom right
-			{ {-0.5f, -0.5f, 0.0f}, {0.0f, 1.0f} }, // bottom left
-			{ { 0.5f,  0.5f, 0.0f}, {1.0f, 0.0f} }, // top right
-		};
-
-		std::vector<uint32_t> indices{
-			0, 1, 2,
-			0, 3, 1
-		};
+		std::vector<Vertex> vertices;
+		std::vector<uint32_t> indices;
+		Utils::ParseOBJ("Resources/vehicle.obj", vertices, indices);
 
 		m_pTestMesh = std::make_unique<Mesh>(m_pDevice, vertices, indices);
-		m_pTestMesh->worldMatrix = Matrix::CreateTranslation(0.0f, 0.0f, 5.0f);
-		m_pTestMesh->SetDiffuseMap("Resources/uv_grid_2.png");
+		m_pTestMesh->SetDiffuseMap("Resources/vehicle_diffuse.png");
 	}
 
 	Renderer::~Renderer()

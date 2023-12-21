@@ -15,7 +15,7 @@ namespace dae
 		m_pTextureLinearTechnique = FindTechnique("TextureLinearTechnique");
 		m_pTextureAnisotropicTechnique = FindTechnique("TextureAnisotropicTechnique");
 
-		static constexpr uint32_t numElements{ 3 };
+		static constexpr uint32_t numElements{ 4 };
 		D3D11_INPUT_ELEMENT_DESC vertexDesc[numElements]{};
 
 		vertexDesc[0].SemanticName		= "POSITION";
@@ -28,10 +28,15 @@ namespace dae
 		vertexDesc[1].AlignedByteOffset	= 12;
 		vertexDesc[1].InputSlotClass	= D3D11_INPUT_PER_VERTEX_DATA;
 
-		vertexDesc[2].SemanticName		= "COLOR";
+		vertexDesc[2].SemanticName		= "NORMAL";
 		vertexDesc[2].Format			= DXGI_FORMAT_R32G32B32_FLOAT;
 		vertexDesc[2].AlignedByteOffset	= 20;
 		vertexDesc[2].InputSlotClass	= D3D11_INPUT_PER_VERTEX_DATA;
+
+		vertexDesc[3].SemanticName		= "TANGENT";
+		vertexDesc[3].Format			= DXGI_FORMAT_R32G32B32_FLOAT;
+		vertexDesc[3].AlignedByteOffset	= 32;
+		vertexDesc[3].InputSlotClass	= D3D11_INPUT_PER_VERTEX_DATA;
 
 		D3DX11_PASS_DESC passDesc{};
 		m_pTexturePointTechnique->GetPassByIndex(0)->GetDesc(&passDesc);
@@ -53,7 +58,7 @@ namespace dae
 		m_pMatWorldViewProjVariable = FindVariable("gWorldViewProj")->AsMatrix();
 		m_pDiffuseMapVariable = FindVariable("gDiffuseMap")->AsShaderResource();
 	}
-
+	 
 	Effect::~Effect()
 	{
 		if (m_pInputLayout) m_pInputLayout->Release();

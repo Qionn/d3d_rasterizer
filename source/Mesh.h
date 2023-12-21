@@ -11,7 +11,8 @@ namespace dae
 	{
 		Vector3 position;
 		Vector2 texCoord;
-		ColorRGB color{ colors::White };
+		Vector3 normal;
+		Vector3 tangent;
 	};
 
 	class Mesh final
